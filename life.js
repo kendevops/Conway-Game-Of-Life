@@ -1,3 +1,7 @@
+function $(selector, container) {
+    return (container || document).querySelector(selector);
+};
+
 (function () {
     var _ = self.Life = function (seed) {
         this.seed = seed;
@@ -66,12 +70,15 @@
     var _ = self.LifeView = function (table, size) {
         this.grid = table;
         this.size = size;
+        this.started = false;
 
         this.createGrid();
     };
 
     _.prototype = {
         createGrid: function () {
+            var me = this;
+
             var fragment = document.createDocumentFragment();
             this.grid.innerHTML = '';
             this.checkboxes = [];
@@ -92,10 +99,47 @@
                 fragment.appendChild(row)
             }
 
+            this.grid.addEventListener('change', function (evt) {
+                if (evt.target.nodeName.toLowerCase() == 'input') {
+                    me.started = false;
+                }
+            })
             this.grid.appendChild(fragment);
 
+        },
+
+        get boardArray() {
+            return this.checkboxes.map(function (row) {
+                return row.map(function (checkbox) {
+                    return +checkbox.checked;
+                });
+            });
+        },
+        play: function () {
+            this.game = new Life(this.boardArray);
+            this.started = true;
+        },
+        next: function () {
+            if (!this.started || this.game) {
+                this.play();
+
+            }
+
+            this.game.next();
+
+            var board = this.game.board;
+
+            for (var y = 0; y < this.size; y++) {
+                for (var x = 0; x < this.size; x++) {
+                    this.checkboxes[y][x].checked = !!board[y][x];
+                }
+            }
         }
     };
 })();
 
 var lifeView = new LifeView(document.getElementById('grid'), 12);
+
+$('button.next').addEventListener('click', function () {
+    lifeView.next();
+});

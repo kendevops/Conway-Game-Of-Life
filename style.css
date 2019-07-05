@@ -12,19 +12,19 @@ h1 {
     margin: .5em 1em;
 }
 
-table {
+#grid {
     margin: auto;
     border-spacing: 0;
     border-collapse: collapse;
 
 }
 
-td {
+#grid td {
     border: 1px solid gray;
 
 }
 
-input[type="checkbox"] {
+#grid input[type="checkbox"] {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
@@ -37,6 +37,6 @@ input[type="checkbox"] {
 
 }
 
-input[type="checkbox"]:checked {
+#grid input[type="checkbox"]:checked {
     background: black;
 }
