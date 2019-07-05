@@ -62,30 +62,17 @@
 
 })();
 
-
-
-var game = new Life([
-    [0, 0, 0, 0, 0],
-    [0, 0, 1, 0, 0],
-    [0, 0, 1, 0, 0],
-    [0, 0, 1, 0, 0],
-    [0, 0, 0, 0, 0]
-]);
-
-console.log(game + '');
-
-game.next();
-
-console.log(game + '');
-
 (function () {
     var _ = self.LifeView = function (table, size) {
         this.grid = table;
+        this.size = size;
+
+        this.createGrid();
     };
 
     _.prototype = {
         createGrid: function () {
-            var fragment = document.createElementFragment();
+            var fragment = document.createDocumentFragment();
             this.grid.innerHTML = '';
             this.checkboxes = [];
 
@@ -110,3 +97,5 @@ console.log(game + '');
         }
     };
 })();
+
+var lifeView = new LifeView(document.getElementById('grid'), 12);
