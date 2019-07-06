@@ -71,6 +71,7 @@ function $(selector, container) {
         this.grid = table;
         this.size = size;
         this.started = false;
+        this.autoplay = false;
 
         this.createGrid();
     };
@@ -120,6 +121,8 @@ function $(selector, container) {
             this.started = true;
         },
         next: function () {
+            var me = this;
+
             if (!this.started || this.game) {
                 this.play();
 
@@ -134,12 +137,32 @@ function $(selector, container) {
                     this.checkboxes[y][x].checked = !!board[y][x];
                 }
             }
+
+            if (this.autoplay) {
+                setTimeout(function () {
+                    me.next();
+                }, 1000)
+            };
         }
     };
 })();
 
 var lifeView = new LifeView(document.getElementById('grid'), 12);
 
-$('button.next').addEventListener('click', function () {
-    lifeView.next();
-});
+(function () {
+    var buttons = {
+        next: $('button.next')
+    }
+    buttons.next.addEventListener('click', function () {
+        lifeView.next();
+    });
+    $('#autoplay').addEventListener('change', function () {
+        buttons.next.textContent = this.checked ? 'Start' : 'Next';
+
+        lifeView.autoplay = this.checked;
+
+        if (!this.checked) {
+            clearTimeout(lifeView.timer)
+        }
+    });
+})();
